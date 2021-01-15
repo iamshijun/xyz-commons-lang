@@ -1,6 +1,7 @@
 package xyz.asitanokibou.common.lang.creator;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -11,6 +12,7 @@ import java.util.NoSuchElementException;
 @SuppressWarnings("rawtypes")
 //因为像LocalDate,LocalDateTime 这两种类型 并不是直接implement Comparable<自身>的这里暂时只能用 raw type 的comparable
 //public abstract class AbstractDataPointCreator<T extends Comparable<T>> implements ValueCreator<T> {
+@NotThreadSafe
 public abstract class AbstractDataPointCreator<T extends Comparable> implements ValueCreator<T> {
 
     /**
@@ -94,6 +96,7 @@ public abstract class AbstractDataPointCreator<T extends Comparable> implements 
     //线程安全比较难支持 hasNext 虽然可以做同步 但当两个线程同事访问hasNext都返回true,其中一个线程调用next()成功但是另外一个调用的话 就会抛异常!
     // 要支持的话 1.增加一个 tryNext方法-即当没有元素的时候不抛异常/或者是将异常suppress掉 2.hasNext做条件等待 需要等到前面的线程/任务执行完对应的next操作 才能继续下去
     // 0. 让调用者自己解决竞争/线程安全问题?
+    @NotThreadSafe
     class Forward implements Relay<T> {
         /*volatile*/ T last;
 
@@ -116,6 +119,7 @@ public abstract class AbstractDataPointCreator<T extends Comparable> implements 
         }
     }
 
+    @NotThreadSafe
     class Backward implements Relay<T> {
         /*volatile*/ T last;
 

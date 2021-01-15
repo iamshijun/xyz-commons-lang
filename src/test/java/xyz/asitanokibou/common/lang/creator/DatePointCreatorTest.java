@@ -222,4 +222,11 @@ public class DatePointCreatorTest {
                     System.out.println("\t" + v);
                 });
     }
+
+    @Test
+    void testDurationAdnPeriod(){
+        LocalDateTime dateTime = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+        LocalDateTime plus = dateTime.plus(Period.ofMonths(1));
+        System.out.println(plus);
+    }
 }
